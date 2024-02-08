@@ -10,7 +10,7 @@ function App(){
 
     const [error, setError] = useState(null);
     const [APIData, setAPIData] = useState('');
-    const [cart, setCart] = useState([{id: 'car', qty: 7}, {id: 'bike', qty: 4} ]); // Array of cartItem objects
+    const [cart, setCart] = useState([]); // Array of cartItem objects
 
     async function fetchAPIData(){
         try{

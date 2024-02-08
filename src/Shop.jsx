@@ -9,10 +9,19 @@ function Shop(){
 
     // NOTE: APIData may still be loading in when Shop is called
 
-    function handleAddtoCart(id){
+    // Returns true if item is new to the cart
+    function isNewItem(item){   
+        return true;
+    }
+
+    function handleAddtoCart(productID){
         // ID should correspond to the card ID
-        console.log(id);
+        console.log(productID);
         // Go thru cart array and create entry or update qty for existing entry
+        // Assume new item
+        const newItem = {id: productID, qty: 1};
+        setCart([...cart, newItem])
+
     }
 
     return(
@@ -30,7 +39,7 @@ function Shop(){
                     })}
                 </div>
             ): 
-            <div>Store Loading</div>
+            <div>Loading Store</div>
         }
         </>   
     )
