@@ -10,6 +10,7 @@ function App(){
 
     const [error, setError] = useState(null);
     const [APIData, setAPIData] = useState('');
+    const [cart, setCart] = useState([{id: 'car', qty: 7}, {id: 'bike', qty: 4} ]); // Array of cartItem objects
 
     async function fetchAPIData(){
         try{
@@ -31,7 +32,7 @@ function App(){
             <Navbar />
             {error? (
                 <div style={{fontSize: "40px"}}>Error: Could not load data from API! 🥹</div>
-                ) : <Outlet context={APIData}/>}
+                ) : <Outlet context={{APIData, cart, setCart}}/>}
         </>
     )
 }
