@@ -7,12 +7,18 @@ function Shop(){
     const [shopItemQtys, setShopItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
 
     if (APIData && !shopItemQtys.length) loadItemQtys();
+
+    // Returns the index in APIData where productID is located
+    function getAPIIndex(productID){
+        const found = APIData.find((item) => item.id == productID);
+        return APIData.indexOf(found);
+    }
     
     // Checks to see if productID is existing cart item and updates quantity if so. Else, creates new cartItem entry.
     function handleAddtoCart(productID){
         if (!getQty(productID, false)) return; // Avoid adding item to cart that has 0 quantity
         getQty(productID, true)? updateQty(productID, getQty(productID,true) + getQty(productID, false),true)
-                                :setCart([...cart, {id: productID, qty: getQty(productID, false)}])
+                                :setCart([...cart, {itemInfo: APIData[getAPIIndex(productID)], qty: getQty(productID, false)}])
     }
 
     // Loads the shopItemQtys to qty 1 AFTER component mount
@@ -37,11 +43,18 @@ function Shop(){
     function updateQty(productID, value, isCart){
         if (value<0 || value>100) return; // Dont allow setting values outside limits
         if (!value) value = 0; // When user deletes value in the box, default to 0
-        let workingArray;
-        isCart? workingArray=cart : workingArray=shopItemQtys
-        const newArr = workingArray.map((item) => {
-            return (item.id == productID)? {id: productID, qty: parseInt(value)}:{id: item.id, qty: item.qty}  
-        }); 
+        let newArr;
+        if (isCart){
+            newArr = cart.map((item) => {
+                return (item.itemInfo.id == productID)? {itemInfo: APIData[getAPIIndex(productID)], qty: parseInt(value)}
+                                                       :{itemInfo: APIData[getAPIIndex(productID)], qty: item.qty}  
+            }); 
+        }else{
+            newArr = shopItemQtys.map((item) => {
+                return (item.id == productID)? {id: item.id, qty: parseInt(value)}
+                                              :{id: item.id, qty: item.qty}  
+            }); 
+        }
         isCart? setCart(newArr) : setShopItemQtys(newArr)
     }
 
