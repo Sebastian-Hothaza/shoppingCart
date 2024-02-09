@@ -29,7 +29,7 @@ function App(){
 
     return (
         <>
-            <Navbar />
+            <Navbar cart={cart}/>
             {error? (
                 <div style={{fontSize: "40px"}}>Error: Could not load data from API! 🥹</div>
                 ) : <Outlet context={{APIData, cart, setCart}}/>}
