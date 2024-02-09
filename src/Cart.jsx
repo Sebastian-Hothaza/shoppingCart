@@ -18,24 +18,36 @@ function Cart(){
         setCart(newArr)
     }
 
+    function getCartTotal(){
+        let total=0;
+        cart.forEach((item) => total += (item.qty * item.itemInfo.price))
+        return total;
+    }
+
     return(
         <div className="cartContents">
             {cart.length?
                 cart.map((item) => {
                     return(
                         <div key={item.itemInfo.id} className="cartCard">
-                            <div>{item.itemInfo.title}</div>
+                            <div className="title">{item.itemInfo.title}</div>
                             <div className="qtyField">
                                 <button className="adjQty" onClick={(e) => updateQty(item.itemInfo.id, item.qty-1)}>-</button>
                                 <div>{item.qty}</div>
                                 <button className="adjQty" onClick={(e) => updateQty(item.itemInfo.id, item.qty+1)}>+</button>
-                                <div>${item.itemInfo.price * item.qty}</div>
                             </div>
+                            <div className="price">${item.itemInfo.price * item.qty}</div>
                         </div>
                     )
                 })
                 :
                 <div>Cart is empty!</div>
+            }
+            {cart.length>0 &&
+                <div className="cartCard total">
+                    <div>TOTAL</div>
+                    <div>${getCartTotal()}</div>
+                </div>
             }
             
         </div>

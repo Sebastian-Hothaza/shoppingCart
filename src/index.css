@@ -3,10 +3,11 @@
     font-family: sans-serif;
 }
 
-a{
+a, .homeLink{
     color: inherit;
     text-decoration: none;
 }
+
 
 button{
     background: none;
@@ -18,3 +19,8 @@ button{
 	outline: inherit;
 }
 
+#root{
+	display: flex;
+	flex-direction: column;	
+	height: 100vh;
+}
