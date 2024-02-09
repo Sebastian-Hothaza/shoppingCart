@@ -1,6 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 
+import './Shop.css'
+
 function Shop(){
     const APIData = useOutletContext().APIData;
     const [cart, setCart] = [useOutletContext().cart, useOutletContext().setCart];
@@ -66,13 +68,15 @@ function Shop(){
                     {APIData.map((item)=> {
                         return (
                             <div key={item.id} id={item.id} className="card">
-                                <div>Item ID: {item.id}</div>
+                                <img src={item.image} alt="" />
+                                <div className="title">{item.title}</div>
+                                <div className="price">${item.price}</div>
                                 <div className="qtyField">
-                                    <button onClick={(e) => updateQty(item.id, getQty(item.id, false)-1, false)}>-</button>
+                                    <button className="adjQty" onClick={(e) => updateQty(item.id, getQty(item.id, false)-1, false)}>-</button>
                                     <input type="text" value={getQty(item.id, false)} onChange={(e) => updateQty(item.id, e.target.value, false)}></input>
-                                    <button onClick={(e) => updateQty(item.id, getQty(item.id, false)+1, false)}>+</button>
+                                    <button className="adjQty" onClick={(e) => updateQty(item.id, getQty(item.id, false)+1, false)}>+</button>
                                 </div>
-                                <button onClick={(e) => handleAddtoCart(item.id)}>Add to Cart</button>
+                                <button className="addCart" onClick={(e) => handleAddtoCart(item.id)}>Add to Cart</button>
                             </div>
                         )
                     })}

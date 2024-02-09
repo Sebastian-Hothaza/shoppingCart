@@ -1,0 +1,61 @@
+.storeItems{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    margin: 20px 50px;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card img{
+    height: 150px;
+    object-fit: contain;
+}
+
+.card .title{
+    align-self: center;
+    text-align: center;
+}
+
+.card .price{
+    align-self: center;
+    font-size: 20px;
+}
+
+.card .qtyField{
+    align-self: center;
+    display: flex;
+    align-items: center;
+}
+
+.adjQty{
+    color: white;
+    font-size: 1.1em;
+    border-radius: 50%;
+    background-color: blue;
+    height: 30px;
+    width: 30px;
+    
+}
+
+.qtyField input{
+    width: 50px;
+    text-align: center;
+    margin: 0 10px;
+    font-size: 1.5em;
+}
+
+.addCart{
+    color: white;
+    background-color: green;
+    align-self: center;
+    padding: .25em 1.5em;
+    border: solid darkgreen 2px;
+    margin-bottom: 10px;
+}
