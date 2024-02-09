@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 50px;
-    margin: 20px 50px;
+    margin: 0px 50px;
 }
 
 .card{
@@ -41,7 +41,6 @@
     background-color: blue;
     height: 30px;
     width: 30px;
-    
 }
 
 .qtyField input{

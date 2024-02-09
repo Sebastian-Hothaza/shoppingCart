@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
+
+import './Cart.css'
 
 
 function Cart(){
@@ -23,10 +24,13 @@ function Cart(){
                 cart.map((item) => {
                     return(
                         <div key={item.itemInfo.id} className="cartCard">
-                            <div>ID: {item.itemInfo.id}</div>
-                            <button onClick={(e) => updateQty(item.itemInfo.id, item.qty-1)}>-</button>
-                            <div>QTY:{item.qty}</div>
-                            <button onClick={(e) => updateQty(item.itemInfo.id, item.qty+1)}>+</button>
+                            <div>{item.itemInfo.title}</div>
+                            <div className="qtyField">
+                                <button className="adjQty" onClick={(e) => updateQty(item.itemInfo.id, item.qty-1)}>-</button>
+                                <div>{item.qty}</div>
+                                <button className="adjQty" onClick={(e) => updateQty(item.itemInfo.id, item.qty+1)}>+</button>
+                                <div>${item.itemInfo.price * item.qty}</div>
+                            </div>
                         </div>
                     )
                 })

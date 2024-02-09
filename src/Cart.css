@@ -1,0 +1,26 @@
+.cartContents{
+    margin: 0px 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cartCard{
+    display: flex;
+    border: black 1px solid;
+    justify-content: space-between;
+}
+
+.qtyField{
+    display: flex;
+    gap: 20px;
+}
+
+.adjQty{
+    color: white;
+    font-size: 1.1em;
+    border-radius: 50%;
+    background-color: blue;
+    height: 30px;
+    width: 30px;
+}
