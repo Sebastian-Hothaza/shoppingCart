@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from './Navbar';
 import ErrorPage from './ErrorPage';
 import './App.css'
@@ -23,14 +23,15 @@ function App(){
         }
     }
 
-    if (!APIData) fetchAPIData();
+    useEffect(() => {
+        fetchAPIData();
+    }, [])
     
     return (
         <>
             <Navbar cart={cart}/>
-            {error? (
-                <div style={{fontSize: "40px"}}>Error: Could not load data from API! 🥹</div>
-                ) : <Outlet context={{APIData, cart, setCart}}/>}
+            {error? <div style={{fontSize: "40px"}}>Error: Could not load data from API! 🥹</div>
+                   :<Outlet context={{APIData, cart, setCart}}/>}
         </>
     )
 }

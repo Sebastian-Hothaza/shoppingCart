@@ -8,3 +8,14 @@
     font-weight: bold;
     padding: .5em;
 }
+
+.cartContents{
+    border: dashed 1px black;
+}
+
+.cartCard{
+    display: flex;
+    margin: 10px;
+    padding: 10px;
+    border: solid 1px black;
+}

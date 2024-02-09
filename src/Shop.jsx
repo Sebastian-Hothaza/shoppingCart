@@ -5,7 +5,6 @@ function Shop(){
     const APIData = useOutletContext().APIData;
     const [cart, setCart] = [useOutletContext().cart, useOutletContext().setCart];
     const [shopItemQtys, setShopItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
-    const [MIN_QTY, MAX_QTY] = [0, 100];
 
     if (APIData && !shopItemQtys.length) loadItemQtys();
     
@@ -36,20 +35,15 @@ function Shop(){
 
     // Updates quantity(overwrites) for a productID with value for either shopItemQtys or cart
     function updateQty(productID, value, isCart){
-        if (value<MIN_QTY || value>MAX_QTY) return; // Dont allow setting values outside limits
+        if (value<0 || value>100) return; // Dont allow setting values outside limits
         if (!value) value = 0; // When user deletes value in the box, default to 0
         let workingArray;
         isCart? workingArray=cart : workingArray=shopItemQtys
         const newArr = workingArray.map((item) => {
-            if (item.id == productID) {        
-                return {id: productID, qty: parseInt(value)}
-            }else{
-                return {id: item.id, qty: item.qty}
-            }
+            return (item.id == productID)? {id: productID, qty: parseInt(value)}:{id: item.id, qty: item.qty}  
         }); 
         isCart? setCart(newArr) : setShopItemQtys(newArr)
     }
-
 
     return(
         <>
