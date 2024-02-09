@@ -15,7 +15,7 @@ function Navbar({cart}){
         <div className='navBar'>
             <Link to="/">Home</Link>
             <Link to="shop">Shop</Link>
-            <Link to="cart">Cart {getCartTotal()? getCartTotal() : ''}</Link>
+            <Link to="cart">Cart {getCartTotal()? '('+getCartTotal()+')' : ''}</Link>
         </div>
     )
 }
