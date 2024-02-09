@@ -8,37 +8,20 @@ function Shop(){
     const [cart, setCart] = [useOutletContext().cart, useOutletContext().setCart];
     const [shopItemQtys, setShopItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
 
-    if (APIData && !shopItemQtys.length) loadItemQtys();
-
-    // Returns the index in APIData where productID is located
-    function getAPIIndex(productID){
-        const found = APIData.find((item) => item.id == productID);
-        return APIData.indexOf(found);
-    }
+    if (APIData && !shopItemQtys.length) setShopItemQtys(APIData.map((item) => ({id: item.id, qty: 1}))); // Loads the shopItemQtys to qty 1 AFTER component mount
     
     // Checks to see if productID is existing cart item and updates quantity if so. Else, creates new cartItem entry.
     function handleAddtoCart(productID){
         if (!getQty(productID, false)) return; // Avoid adding item to cart that has 0 quantity
-        getQty(productID, true)? updateQty(productID, getQty(productID,true) + getQty(productID, false),true)
-                                :setCart([...cart, {itemInfo: APIData[getAPIIndex(productID)], qty: getQty(productID, false)}])
-    }
-
-    // Loads the shopItemQtys to qty 1 AFTER component mount
-    function loadItemQtys(){
-        let newArr = APIData.map((item) => {
-            return {id: item.id, qty: 1};
-        }) 
-        setShopItemQtys(newArr);
+        (getQty(productID, true))? updateQty(productID, getQty(productID,true) + getQty(productID, false), true)
+                                :setCart([...cart, {itemInfo: APIData[APIData.indexOf(APIData.find((item) => item.id == productID))], qty: getQty(productID, false)}])                                
     }
 
      // Returns the quantity for a productID with value for either shopItemQtys or cart. If not in array, returns 0
     function getQty(productID, isCart){
-        let workingArray;
-        isCart? workingArray = cart : workingArray = shopItemQtys
-        for (let i=0; i<workingArray.length; i++){
-            if (workingArray[i].id == productID) return workingArray[i].qty;
-        }
-        return 0;       
+        let result = (isCart)? cart.find((item) => (item.itemInfo && item.itemInfo.id == productID))
+        :shopItemQtys.find((item) => (item.id && item.id == productID))
+        return (result)? result.qty : 0 //NOTE: Both cart and shopItemQtys has qty property    
     }
 
     // Updates quantity(overwrites) for a productID with value for either shopItemQtys or cart
@@ -48,13 +31,11 @@ function Shop(){
         let newArr;
         if (isCart){
             newArr = cart.map((item) => {
-                return (item.itemInfo.id == productID)? {itemInfo: APIData[getAPIIndex(productID)], qty: parseInt(value)}
-                                                       :{itemInfo: APIData[getAPIIndex(productID)], qty: item.qty}  
+                return (item.itemInfo.id == productID)? {itemInfo: item.itemInfo, qty: parseInt(value)}:item                                     
             }); 
         }else{
             newArr = shopItemQtys.map((item) => {
-                return (item.id == productID)? {id: item.id, qty: parseInt(value)}
-                                              :{id: item.id, qty: item.qty}  
+                return (item.id == productID)? {id: item.id, qty: parseInt(value)}:item                         
             }); 
         }
         isCart? setCart(newArr) : setShopItemQtys(newArr)
