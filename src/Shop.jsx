@@ -1,13 +1,13 @@
 import { useOutletContext } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-// TODO: Fix issue where modifying cart quantity immediately on load results in qty being replaced by 1
+import { useState } from "react";
 
 function Shop(){
     const APIData = useOutletContext().APIData;
     const [cart, setCart] = [useOutletContext().cart, useOutletContext().setCart];
     const [shopItemQtys, setShopItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
     const [MIN_QTY, MAX_QTY] = [0, 100];
+
+    if (APIData && !shopItemQtys.length) loadItemQtys();
     
     // Checks to see if productID is existing cart item and updates quantity if so. Else, creates new cartItem entry.
     function handleAddtoCart(productID){
@@ -49,11 +49,6 @@ function Shop(){
         }); 
         isCart? setCart(newArr) : setShopItemQtys(newArr)
     }
-
-    // Executed after the component mount
-    useEffect(() => {
-        if (APIData) loadItemQtys();
-    }, [APIData])
 
 
     return(
