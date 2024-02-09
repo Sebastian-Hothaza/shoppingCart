@@ -1,16 +1,17 @@
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-// TODO: Set min/max qty
 // TODO: Fix issue where modifying cart quantity immediately on load results in qty being replaced by 1
 
 function Shop(){
     const APIData = useOutletContext().APIData;
     const [cart, setCart] = [useOutletContext().cart, useOutletContext().setCart];
     const [shopItemQtys, setShopItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
+    const [MIN_QTY, MAX_QTY] = [0, 100];
     
     // Checks to see if productID is existing cart item and updates quantity if so. Else, creates new cartItem entry.
     function handleAddtoCart(productID){
+        if (!getQty(productID, false)) return; // Avoid adding item to cart that has 0 quantity
         getQty(productID, true)? updateQty(productID, getQty(productID,true) + getQty(productID, false),true)
                                 :setCart([...cart, {id: productID, qty: getQty(productID, false)}])
     }
@@ -35,6 +36,8 @@ function Shop(){
 
     // Updates quantity(overwrites) for a productID with value for either shopItemQtys or cart
     function updateQty(productID, value, isCart){
+        if (value<MIN_QTY || value>MAX_QTY) return; // Dont allow setting values outside limits
+        if (!value) value = 0; // When user deletes value in the box, default to 0
         let workingArray;
         isCart? workingArray=cart : workingArray=shopItemQtys
         const newArr = workingArray.map((item) => {
@@ -46,7 +49,6 @@ function Shop(){
         }); 
         isCart? setCart(newArr) : setShopItemQtys(newArr)
     }
-
 
     // Executed after the component mount
     useEffect(() => {
