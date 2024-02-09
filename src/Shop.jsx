@@ -1,41 +1,50 @@
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+// TODO: Set min/max qty
+// TODO: Fix issue where modifying cart quantity immediately on load results in qty being replaced by 1
+
 function Shop(){
     const APIData = useOutletContext().APIData;
     const [cart, setCart] = [useOutletContext().cart, useOutletContext().setCart];
-    const [itemQtys, setItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
+    const [shopItemQtys, setShopItemQtys] = useState([]); // Array of cartItems objects representing the state of input boxes for quantities
     
-
+    // Checks to see if productID is existing cart item and updates quantity if so. Else, creates new cartItem entry.
     function handleAddtoCart(productID){
-        const newItem = {id: productID, qty: 1};
-        setCart([...cart, newItem])
+        getQty(productID, true)? updateQty(productID, getQty(productID,true) + getQty(productID, false),true)
+                                :setCart([...cart, {id: productID, qty: getQty(productID, false)}])
     }
 
-    // Loads the itemQtys AFTER component mount
+    // Loads the shopItemQtys to qty 1 AFTER component mount
     function loadItemQtys(){
         let newArr = APIData.map((item) => {
             return {id: item.id, qty: 1};
         }) 
-        setItemQtys(newArr);
+        setShopItemQtys(newArr);
     }
 
-
-    function getQty(productID){
-        for (let i=0; i<itemQtys.length; i++){
-            if (itemQtys[i].id == productID) return itemQtys[i].qty;
-        }       
+     // Returns the quantity for a productID with value for either shopItemQtys or cart. If not in array, returns 0
+    function getQty(productID, isCart){
+        let workingArray;
+        isCart? workingArray = cart : workingArray = shopItemQtys
+        for (let i=0; i<workingArray.length; i++){
+            if (workingArray[i].id == productID) return workingArray[i].qty;
+        }
+        return 0;       
     }
 
-    function updateQty(productID, value){
-        const newArr = itemQtys.map((item) => {
+    // Updates quantity(overwrites) for a productID with value for either shopItemQtys or cart
+    function updateQty(productID, value, isCart){
+        let workingArray;
+        isCart? workingArray=cart : workingArray=shopItemQtys
+        const newArr = workingArray.map((item) => {
             if (item.id == productID) {        
                 return {id: productID, qty: parseInt(value)}
             }else{
                 return {id: item.id, qty: item.qty}
             }
         }); 
-        setItemQtys(newArr);
+        isCart? setCart(newArr) : setShopItemQtys(newArr)
     }
 
 
@@ -47,7 +56,7 @@ function Shop(){
 
     return(
         <>
-        {(APIData && itemQtys.length)?
+        {(APIData && shopItemQtys)?
             (
                 <div className="storeItems">
                     {APIData.map((item)=> {
@@ -55,9 +64,9 @@ function Shop(){
                             <div key={item.id} id={item.id} className="card">
                                 <div>Item ID: {item.id}</div>
                                 <div className="qtyField">
-                                    <button onClick={(e) => updateQty(item.id, getQty(item.id)-1)}>-</button>
-                                    <input type="text" value={getQty(item.id)} onChange={(e) => updateQty(item.id, e.target.value)}></input>
-                                    <button onClick={(e) => updateQty(item.id, getQty(item.id)+1)}>+</button>
+                                    <button onClick={(e) => updateQty(item.id, getQty(item.id, false)-1, false)}>-</button>
+                                    <input type="text" value={getQty(item.id, false)} onChange={(e) => updateQty(item.id, e.target.value, false)}></input>
+                                    <button onClick={(e) => updateQty(item.id, getQty(item.id, false)+1, false)}>+</button>
                                 </div>
                                 <button onClick={(e) => handleAddtoCart(item.id)}>Add to Cart</button>
                             </div>
